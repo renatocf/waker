@@ -37,7 +37,8 @@ function initialize()
   if (navigator.vibrate) vibration = true;
   else vibration = false;
 
-  if (typeof(audio) != "undefined") hasAudio = true;
+  var a = document.createElement('audio');
+  if (!!(a.canPlayType && a.canPlayType('audio/mpeg;').replace(/no/, ''))) hasAudio = true;
   else hasAudio = false;
 
   audio = document.getElementById("audio");
@@ -46,7 +47,7 @@ function initialize()
   button_canc = document.getElementById("button_canc");
   button_stop.style.display="none";
   button_canc.style.display="none";
-  audio.play();
+  //audio.play();
   
   // Initial map
   var mapOptions = {
@@ -221,7 +222,8 @@ function stop()
   button_stop.style.display="none";
   button_canc.style.display="none";
   button_wake.style.display="block";
-  if(hasAudio) audio.pause();
+  if(hasAudio) 
+    audio.pause();
   if(vibration) navigator.vibrate(0);
   dist = minimumDist;
 }
