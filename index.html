@@ -24,9 +24,9 @@
   <body>
     <!-- /// TOPBAR \\\-->
     <nav class="navbar navbar-inverse" role="navigation">
+      <a href="index.html"><img id="title"  src="title.png"></a>
       <div class="container-fluid">
         <div class="navbar-header">
-          <a class="navbar-brand" href="#">Waker</a>
         </div>
       </div>
     </nav>

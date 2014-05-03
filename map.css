@@ -1,12 +1,7 @@
 html, body, #map-canvas {
-  height: calc(100% - 72px);
-  margin: 10px;
+  height: calc(100% - 64px);
+  margin: 15px;
   padding: 0px;
-}
-
-#map-canvas {
-  margin-left:0;
-  margin-right:0;
 }
 
 .controls {
@@ -56,40 +51,62 @@ html, body, #map-canvas {
 .btn{
   margin-left:30%;
   width:40%;
-  margin-bottom:15px;
+  margin-bottom:5px;
   margin-top:5px;
 }
 
-@media all and (max-width:600px){
+@media all and (max-width:500px){
  .btn{
-    margin:0;
-    margin-bottom:10px;
-    width:100%;
+    margin-left:15px;
+    margin-right:15px;
+    width:calc(100% - 30px);
   } 
 }
 
 @media (orientation:landscape){
   html, body, #map-canvas {
-    height: calc(100% - 72px);
-    margin: 10px;
+    height: calc(100% - 64px);
+    margin: 15px;
     padding: 0px;
   }
   
-  #map-canvas {
-    margin-left:0;
-    margin-right:0;
-  }
 }
 
-@media all and (max-height:415px){
+@media all and (max-height:395px){
   html, body, #map-canvas {
     height: 200px;
-    margin: 10px;
+    margin: 15px;
     padding: 0px;
-  }
-  
-  #map-canvas {
-    margin-left:0;
-    margin-right:0;
-  }
+  } 
+}
+
+html, body {
+  margin:0;
+  background-image:url("background.png");
+}
+
+.navbar{
+  -moz-border-radius: 0px;
+  border-radius: 0px;
+}
+
+.input-group {
+  margin:15px;
+}
+
+.btn{
+  margin-top:-5px;
+  margin-bottom:10px;
+}
+
+#title {
+  display:block;
+  margin:0 auto;
+}
+
+#map-canvas {
+  border: 1px solid #a1a1a1;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset;
 }
