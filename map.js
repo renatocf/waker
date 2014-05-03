@@ -14,6 +14,7 @@ var dist;
 
 //var audio = new Audio("metal_gear_game_over.mp3");
 var audio;
+var canceled = false;
 var button_wake;
 var button_stop;
 
@@ -26,8 +27,10 @@ function initialize()
   audio = document.getElementById("audio");
   button_wake = document.getElementById("button_wake");
   button_stop = document.getElementById("button_stop");
+  button_canc = document.getElementById("button_canc");
   button_stop.style.display="none";
-  audio.play();
+  button_canc.style.display="none";
+  //audio.play();
   
   // Initial map
   var mapOptions = {
@@ -62,8 +65,10 @@ function initialize()
     // For each place, get the icon, place name, and location.
     markers = [];
     var bounds = new google.maps.LatLngBounds();
-    for (var i = 0, place; place = places[i]; i++) {
+    //for (var i = 0, place; place = places[i]; i++) {
+      var place = places[0];
       target = place.geometry.location;
+      console.log("UMAUMAUMAE");
 
       var image = {
         url: place.icon,
@@ -77,14 +82,14 @@ function initialize()
       var marker = new google.maps.Marker({
         map: map,
         icon: image,
-        title: place.name,
+        title: places.name,
         position: place.geometry.location
       });
 
       markers.push(marker);
 
       bounds.extend(place.geometry.location);
-    }
+    //}
 
     map.fitBounds(bounds);
   });
@@ -109,8 +114,7 @@ function initialize()
  */
 function geoUpdate()
 {
-  navigator.geolocation.getCurrentPosition
-  (
+  navigator.geolocation.getCurrentPosition(
     function(position) 
     {
       var pos = new google.maps.LatLng(
@@ -148,6 +152,12 @@ function geoUpdateR()
   console.log("Update...");
   console.log(dist);
 
+  if(canceled) { canceled = false; return; }
+
+  button_stop.style.display="none";
+  button_canc.style.display="block";
+  button_wake.style.display="none";
+
   if(dist < minimumDist) 
   {
     wakeUp();
@@ -164,7 +174,12 @@ function wakeUp()
 {
   console.log("WAKE UP");
   button_stop.style.display="block";
+  button_canc.style.display="none";
   button_wake.style.display="none";
+  audio.addEventListener('ended', function() {
+    this.currentTime = 0;
+    this.play();
+  }, false);
   audio.play();
 }
 
@@ -176,8 +191,20 @@ function stop()
 {
   console.log("stop");
   button_stop.style.display="none";
+  button_canc.style.display="none";
   button_wake.style.display="block";
-  audio.stop();
+  audio.pause();
+  dist = minimumDist;
+}
+
+function cancel()
+{
+  canceled = true;
+  console.log("canceling");
+  button_stop.style.display="none";
+  button_canc.style.display="none";
+  button_wake.style.display="block";
+  dist = minimumDist;
 }
 
 /**
