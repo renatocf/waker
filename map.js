@@ -1,4 +1,12 @@
-// MAGICAL VARIABLES /////////////////////////////////////////////////
+/*
+////////////////////////////////////////////////////////////////////////////////
+-------------------------------------------------------------------------------
+                                  VARIABLES
+-------------------------------------------------------------------------------
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+*/
+
+// Main setups
 var updateTime  = 5000; // Time interval to update location (ms)
 var minimumDist = 1;    // Minimum distance to wake up (km)
 
@@ -15,13 +23,29 @@ var current_marker;
 // and your target position.
 var dist;
 
-//var audio = new Audio("metal_gear_game_over.mp3");
-var audio;
+// Flags to stop recursive calls
 var canceled = false;
+var stopped  = false;
+
+// Buttons in the app
 var button_wake;
 var button_stop;
-var vibration;
+var button_canc;
+
+// Audio configurations (for web browsers)
+var audio;
 var hasAudio;
+
+// Vibration configuration (for mobile browsers)
+var vibration;
+
+/*
+////////////////////////////////////////////////////////////////////////////////
+-------------------------------------------------------------------------------
+                                 FUNCTIONS
+-------------------------------------------------------------------------------
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+*/
 
 /**
  * function: initialize
@@ -29,25 +53,27 @@ var hasAudio;
  */
 function initialize() 
 {
-  navigator.vibrate = navigator.vibrate ||
-                  navigator.webkitVibrate ||
-                  navigator.mozVibrate || 
-                  navigator.msVibrate;
+  // VIBRATION
+  navigator.vibrate = navigator.vibrate
+    || navigator.webkitVibrate
+    || navigator.mozVibrate
+    || navigator.msVibrate;
 
   if (navigator.vibrate) vibration = true;
   else vibration = false;
 
+  // AUDIO
   var a = document.createElement('audio');
   if (!!(a.canPlayType && a.canPlayType('audio/mpeg;').replace(/no/, ''))) hasAudio = true;
   else hasAudio = false;
 
   audio = document.getElementById("audio");
+  
   button_wake = document.getElementById("button_wake");
   button_stop = document.getElementById("button_stop");
   button_canc = document.getElementById("button_canc");
   button_stop.style.display="none";
   button_canc.style.display="none";
-  //audio.play();
   
   // Initial map
   var mapOptions = {
@@ -81,32 +107,31 @@ function initialize()
     // For each place, get the icon, place name, and location.
     markers = [];
     var bounds = new google.maps.LatLngBounds();
-    //for (var i = 0, place; place = places[i]; i++) {
-      var place = places[0];
-      target = place.geometry.location;
+    
+    var place = places[0];
+    target = place.geometry.location;
 
-      var image = {
-        url: place.icon,
-        size: new google.maps.Size(71, 71),
-        origin: new google.maps.Point(0, 0),
-        anchor: new google.maps.Point(17, 34),
-        scaledSize: new google.maps.Size(25, 25)
-      };
+    var image = {
+      url: place.icon,
+      size: new google.maps.Size(71, 71),
+      origin: new google.maps.Point(0, 0),
+      anchor: new google.maps.Point(17, 34),
+      scaledSize: new google.maps.Size(25, 25)
+    };
 
-      // Create a marker for each place.
-      var marker = new google.maps.Marker({
-        map: map,
-        icon: image,
-        title: places.name,
-        position: place.geometry.location
-      });
+    // Create a marker for each place.
+    var marker = new google.maps.Marker({
+      map: map,
+      icon: image,
+      title: places.name,
+      position: place.geometry.location
+    });
 
-      markers.push(marker);
+    markers.push(marker);
 
-      bounds.extend(place.geometry.location);
-    //}
+    bounds.extend(place.geometry.location);
 
-    map.fitBounds(bounds);
+    // map.fitBounds(bounds);
   });
 
   /**
@@ -119,8 +144,7 @@ function initialize()
   });
 
   // Use tail recursion to update position from 5s to 5s
-  console.log("Init update:");
-  //geoUpdateR();
+  console.log("Init updates:");
 }
 
 /**
@@ -177,6 +201,7 @@ function geoUpdateR()
   console.log(dist);
 
   if(canceled) { canceled = false; return; }
+  if(stopped)  { stopped  = false; return; }
 
   button_stop.style.display="none";
   button_canc.style.display="block";
@@ -218,23 +243,32 @@ function wakeUp()
  */
 function stop()
 {
-  console.log("stop");
+  stopped = true;
+  console.log("stopping");
+  
   button_stop.style.display="none";
   button_canc.style.display="none";
   button_wake.style.display="block";
-  if(hasAudio) 
-    audio.pause();
+  
+  if(hasAudio)  audio.pause();
   if(vibration) navigator.vibrate(0);
+  
   dist = minimumDist;
 }
 
+/**
+ * function: cancel
+ * Set flags for cancelling the execution of waking up
+ */
 function cancel()
 {
   canceled = true;
   console.log("canceling");
+  
   button_stop.style.display="none";
   button_canc.style.display="none";
   button_wake.style.display="block";
+  
   dist = minimumDist;
 }
 
