@@ -133,7 +133,7 @@ function geoUpdate()
 
       if(typeof(current_marker) != "undefined")
         current_marker.setMap(null);
-      
+
       current_marker = new google.maps.Marker({
         position: pos,
         map: map,
@@ -154,6 +154,12 @@ function geoUpdate()
  */
 function geoUpdateR()
 {
+  if(typeof(target) == "undefined")
+  {
+    document.getElementById('pac-input').focus();
+    return;
+  }
+
   geoUpdate();
   console.log("Update...");
   console.log(dist);
