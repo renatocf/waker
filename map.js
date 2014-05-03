@@ -4,6 +4,9 @@ var map;
 // Time interval to update location
 var updateTime = 5000;
 
+var target;
+var currentLocation;
+
 /**
  * function: initialize
  * Inicializa um novo mapa para ser usado pelo usuário.
@@ -28,6 +31,10 @@ function initialize()
   {
     navigator.geolocation.getCurrentPosition(
       function(position) {
+        console.log("Current position");
+        currentLocation = new google.maps.LatLng(
+          position.coords.latitude,position.coords.longitude
+        );
         var pos = new google.maps.LatLng(
           position.coords.latitude,position.coords.longitude
         );
@@ -73,6 +80,8 @@ function initialize()
     markers = [];
     var bounds = new google.maps.LatLngBounds();
     for (var i = 0, place; place = places[i]; i++) {
+      target = place.geometry.location;
+
       var image = {
         url: place.icon,
         size: new google.maps.Size(71, 71),
@@ -120,6 +129,9 @@ function geoUpdate()
   navigator.geolocation.getCurrentPosition
   (
     function(position) {
+      currentLocation = new google.maps.LatLng(
+        position.coords.latitude,position.coords.longitude
+      );
       var pos = new google.maps.LatLng(
         position.coords.latitude,position.coords.longitude
       );
@@ -146,8 +158,23 @@ function geoUpdateR()
 {
   geoUpdate();
   console.log("Update...");
+
+  if(typeof(currentLocation) == "undefined")
+  {
+    console.log("UAEHUAHEUAHUEHUAHE");
+  }
+  var dist = google.maps.geometry.spherical.computeDistanceBetween(currentLocation,currentLocation);
+  //console.log(dist);
+
   setTimeout(geoUpdateR, updateTime);
 }
+
+// function distance(location1, location2)
+// {
+//   var x2 = Math.pow(location1.lat()-location2.lat(),2);
+//   var y2 = Math.pow(location1.lng()-location2.lng(),2);
+//   return sqrt(x2 + y2);
+// }
 
 /**
  * function: handleNoGeolocation
