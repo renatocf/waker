@@ -1,15 +1,26 @@
+// Map to be showed to the user
 var map;
 
-// Inicializa mapa
+// Time interval to update location
+var updateTime = 5000;
+
+/**
+ * function: initialize
+ * Inicializa um novo mapa para ser usado pelo usuário.
+ */
 function initialize() 
 {
-  // Mapa inicial
+  // Initial map
   var mapOptions = {
     mapTypeId: google.maps.MapTypeId.ROADMAP,
     zoom: 16
   };
   map = new google.maps.Map(document.getElementById('map-canvas'),
       mapOptions);
+
+  // Browser doesn't support Geolocation
+  if(navigator.geolocation) geoUpdate();
+  else handleNoGeolocation(false);
 
 ////////////////////////////// SEARCH BOX /////////////////////////////////
   // Try HTML5 geolocation
@@ -42,12 +53,15 @@ function initialize()
 
   ////////////////////////////// SEARCH BOX /////////////////////////////////
   var markers = [];
-  var input   = document.getElementById('pac-input');
 
-  //map.controls[google.maps.ControlPosition.TOP_RIGHT].push(input);
-
+  // Define search box do Google Maps
+  var input     = document.getElementById('pac-input');
   var searchBox = new google.maps.places.SearchBox(input);
 
+  /**
+   * listener: places_changed
+   * Restore the images when receiving the event 'places_changed'.
+   */
   google.maps.event.addListener(searchBox, 'places_changed', function() {
     var places = searchBox.getPlaces();
 
@@ -83,13 +97,63 @@ function initialize()
     map.fitBounds(bounds);
   });
 
+  /**
+   * listener: bounds_changed
+   * Change the bounds of the map when receives 'bounds_changed'.
+   */
   google.maps.event.addListener(map, 'bounds_changed', function() {
     var bounds = map.getBounds();
     searchBox.setBounds(bounds);
   });
+
+  // Use tail recursion to update position from 5s to 5s
+  console.log("Init update:");
+  geoUpdateR();
 }
 
-// Não suporta geolocalização
+/**
+ * function: geoUpdate
+ * Updates the current position of the user
+ */
+function geoUpdate()
+{
+  navigator.geolocation.getCurrentPosition
+  (
+    function(position) {
+      var pos = new google.maps.LatLng(
+        position.coords.latitude,position.coords.longitude
+      );
+
+      var infowindow = new google.maps.InfoWindow({
+        map: map,
+        position: pos,
+        content: 'Location found using HTML5.'
+      });
+
+      map.setCenter(pos);
+    }, 
+    function() {
+      handleNoGeolocation(true);
+    }
+  );
+}
+
+/**
+ * function: geoUpdate
+ * Updates the current position of the user
+ */
+function geoUpdateR()
+{
+  geoUpdate();
+  console.log("Update...");
+  setTimeout(geoUpdateR, updateTime);
+}
+
+/**
+ * function: handleNoGeolocation
+ * Return error to the user if the browser does not support geolocation.
+ * @param errorFLag Flag para indicar erro
+ */
 function handleNoGeolocation(errorFlag) 
 {
   if (errorFlag) {
@@ -108,4 +172,6 @@ function handleNoGeolocation(errorFlag)
   map.setCenter(options.position);
 }
 
+// Call the function which initializes the map when finish
+// loading the browser window.
 google.maps.event.addDomListener(window, 'load', initialize);
