@@ -12,12 +12,15 @@ var target;
 // and your target position.
 var dist;
 
+//var audio = new Audio("metal_gear_game_over.mp3");
+var audio = document.getElementById("audio");
 /**
  * function: initialize
  * Inicializa um novo mapa para ser usado pelo usuário.
  */
 function initialize() 
 {
+  audio.play();
   // Initial map
   var mapOptions = {
     mapTypeId: google.maps.MapTypeId.ROADMAP,
@@ -148,6 +151,7 @@ function geoUpdateR()
 function wakeUp()
 {
   console.log("WAKE UP");
+  audio.play();
 }
 
 /**
