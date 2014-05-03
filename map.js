@@ -8,7 +8,7 @@
 
 // Main setups
 var updateTime  = 5000; // Time interval to update location (ms)
-var minimumDist = 1;    // Minimum distance to wake up (km)
+var minimumDist = 0.2;    // Minimum distance to wake up (km)
 
 // Map to be showed to the user
 var map;
