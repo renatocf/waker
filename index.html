@@ -2,8 +2,10 @@
 <html>
   <head>
     <title>Geolocation</title>
-    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="bootstrap.css" rel="stylesheet" type="text/css">
     <link href="map.css" rel="stylesheet" type="text/css">
 
     <!-- //////////////////////////////////// API \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ -->
@@ -20,8 +22,27 @@
   </head>
 
   <body>
-    <input id="pac-input" class="controls" type="text" placeholder="Search Box">
+    <!-- /// TOPBAR \\\-->
+    <nav class="navbar navbar-inverse" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">Waker</a>
+        </div>
+      </div>
+    </nav>
+    
+    <div class="input-group">
+      <span class="input-group-addon"><img src="map-marker.png" height="20" width="20"></span>
+      <input id="pac-input" type="text" class="form-control" placeholder="Where are you going?">
+    </div>
+    
     <div id="map-canvas"></div>
+    
+    <div class="btn btn-lg btn-primary" role="button" onclick="">Wake me!</div>
+    
+    <!-- Bootstrap core JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="bootstrap.js"></script>
   </body>
 
 </html>
