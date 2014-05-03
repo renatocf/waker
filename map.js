@@ -28,6 +28,7 @@ function initialize()
   button_stop = document.getElementById("button_stop");
   button_stop.style.display="none";
   audio.play();
+  
   // Initial map
   var mapOptions = {
     mapTypeId: google.maps.MapTypeId.ROADMAP,
@@ -165,6 +166,18 @@ function wakeUp()
   button_stop.style.display="block";
   button_wake.style.display="none";
   audio.play();
+}
+
+/**
+ * function: stop
+ * Stop waking up user
+ */
+function stop()
+{
+  console.log("stop");
+  button_stop.style.display="none";
+  button_wake.style.display="block";
+  audio.stop();
 }
 
 /**

@@ -4,6 +4,11 @@ html, body, #map-canvas {
   padding: 0px;
 }
 
+#map-canvas {
+  margin-left:0;
+  margin-right:0;
+}
+
 .controls {
   margin-top: 16px;
   border: 1px solid transparent;
@@ -46,4 +51,9 @@ html, body, #map-canvas {
   font-family: Roboto;
   font-size: 13px;
   font-weight: 300;
+}
+
+.btn{
+  margin-left:30%;
+  width:40%;
 }
