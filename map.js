@@ -33,7 +33,7 @@ function initialize()
   button_canc = document.getElementById("button_canc");
   button_stop.style.display="none";
   button_canc.style.display="none";
-  //audio.play();
+  audio.play();
   
   // Initial map
   var mapOptions = {
