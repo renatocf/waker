@@ -76,7 +76,7 @@ html, body, #map-canvas {
   }
 }
 
-@media all and (max-height:440px){
+@media all and (max-height:415px){
   html, body, #map-canvas {
     height: 200px;
     margin: 10px;
