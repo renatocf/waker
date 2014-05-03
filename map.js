@@ -20,6 +20,7 @@ var audio;
 var canceled = false;
 var button_wake;
 var button_stop;
+var vibration;
 
 /**
  * function: initialize
@@ -27,6 +28,20 @@ var button_stop;
  */
 function initialize() 
 {
+  navigator.vibrate = navigator.vibrate ||
+                  navigator.webkitVibrate ||
+                  navigator.mozVibrate || 
+                  navigator.msVibrate;
+
+  if (navigator.vibrate) 
+  {
+    navigator.vibrate(500);
+    console.log('we can vibrate');
+  } 
+  else 
+  {
+    console.log('no vibration for you :-(');
+  }
   audio = document.getElementById("audio");
   button_wake = document.getElementById("button_wake");
   button_stop = document.getElementById("button_stop");
