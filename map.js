@@ -234,7 +234,11 @@ function wakeUp()
     audio.play();
   }
   if(vibration)
-    navigator.vibrate([500, 1000, 800, 500, 1000]);
+    navigator.vibrate([
+      500, 1000, 500, 1000, 500, 3000, 
+      500, 1000, 500, 1000, 500, 3000, 
+      500, 1000, 500, 1000, 500, 3000
+    ]);
 }
 
 /**
