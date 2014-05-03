@@ -8,6 +8,9 @@ var map;
 // Target location (where you should be waken up)
 var target;
 
+// Marker with the current location of the position
+var current_marker;
+
 // Distance (in km) between your current position
 // and your target position.
 var dist;
@@ -128,10 +131,13 @@ function geoUpdate()
         dist = google.maps.geometry.spherical.computeDistanceBetween(target,pos)/1000;
       }
 
-      var infowindow = new google.maps.InfoWindow({
-        map: map,
+      if(typeof(current_marker) != "undefined")
+        current_marker.setMap(null);
+      
+      current_marker = new google.maps.Marker({
         position: pos,
-        content: 'Location found using HTML5.'
+        map: map,
+        title: 'Location found using HTML5.'
       });
 
       map.setCenter(pos);
