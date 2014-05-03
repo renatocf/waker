@@ -13,13 +13,20 @@ var target;
 var dist;
 
 //var audio = new Audio("metal_gear_game_over.mp3");
-var audio = document.getElementById("audio");
+var audio;
+var button_wake;
+var button_stop;
+
 /**
  * function: initialize
  * Inicializa um novo mapa para ser usado pelo usuário.
  */
 function initialize() 
 {
+  audio = document.getElementById("audio");
+  button_wake = document.getElementById("button_wake");
+  button_stop = document.getElementById("button_stop");
+  button_stop.style.display="none";
   audio.play();
   // Initial map
   var mapOptions = {
@@ -92,7 +99,7 @@ function initialize()
 
   // Use tail recursion to update position from 5s to 5s
   console.log("Init update:");
-  geoUpdateR();
+  //geoUpdateR();
 }
 
 /**
@@ -140,7 +147,11 @@ function geoUpdateR()
   console.log("Update...");
   console.log(dist);
 
-  if(dist < minimumDist) wakeUp();
+  if(dist < minimumDist) 
+  {
+    wakeUp();
+    return;
+  }
   setTimeout(geoUpdateR, updateTime);
 }
 
@@ -151,6 +162,8 @@ function geoUpdateR()
 function wakeUp()
 {
   console.log("WAKE UP");
+  button_stop.style.display="block";
+  button_wake.style.display="none";
   audio.play();
 }
 
