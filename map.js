@@ -1,11 +1,16 @@
+// MAGICAL VARIABLES /////////////////////////////////////////////////
+var updateTime  = 5000; // Time interval to update location (ms)
+var minimumDist = 1;    // Minimum distance to wake up (km)
+
 // Map to be showed to the user
 var map;
 
-// Time interval to update location
-var updateTime = 5000;
-
+// Target location (where you should be waken up)
 var target;
-var currentLocation;
+
+// Distance (in km) between your current position
+// and your target position.
+var dist;
 
 /**
  * function: initialize
@@ -24,39 +29,6 @@ function initialize()
   // Browser doesn't support Geolocation
   if(navigator.geolocation) geoUpdate();
   else handleNoGeolocation(false);
-
-////////////////////////////// SEARCH BOX /////////////////////////////////
-  // Try HTML5 geolocation
-  if(navigator.geolocation) 
-  {
-    navigator.geolocation.getCurrentPosition(
-      function(position) {
-        console.log("Current position");
-        currentLocation = new google.maps.LatLng(
-          position.coords.latitude,position.coords.longitude
-        );
-        var pos = new google.maps.LatLng(
-          position.coords.latitude,position.coords.longitude
-        );
-
-        var infowindow = new google.maps.InfoWindow({
-          map: map,
-          position: pos,
-          content: 'Location found using HTML5.'
-        });
-
-        map.setCenter(pos);
-      }, 
-      function() {
-        handleNoGeolocation(true);
-      }
-    );
-  } 
-  else 
-  {
-    // Browser doesn't support Geolocation
-    handleNoGeolocation(false);
-  }
 
   ////////////////////////////// SEARCH BOX /////////////////////////////////
   var markers = [];
@@ -128,13 +100,18 @@ function geoUpdate()
 {
   navigator.geolocation.getCurrentPosition
   (
-    function(position) {
-      currentLocation = new google.maps.LatLng(
-        position.coords.latitude,position.coords.longitude
-      );
+    function(position) 
+    {
       var pos = new google.maps.LatLng(
         position.coords.latitude,position.coords.longitude
       );
+      
+      // If there is a target, calculates the distance 
+      // between the target and the current position
+      if(typeof(target) != "undefined")
+      {
+        dist = google.maps.geometry.spherical.computeDistanceBetween(target,pos)/1000;
+      }
 
       var infowindow = new google.maps.InfoWindow({
         map: map,
@@ -158,23 +135,20 @@ function geoUpdateR()
 {
   geoUpdate();
   console.log("Update...");
+  console.log(dist);
 
-  if(typeof(currentLocation) == "undefined")
-  {
-    console.log("UAEHUAHEUAHUEHUAHE");
-  }
-  var dist = google.maps.geometry.spherical.computeDistanceBetween(currentLocation,currentLocation);
-  //console.log(dist);
-
+  if(dist < minimumDist) wakeUp();
   setTimeout(geoUpdateR, updateTime);
 }
 
-// function distance(location1, location2)
-// {
-//   var x2 = Math.pow(location1.lat()-location2.lat(),2);
-//   var y2 = Math.pow(location1.lng()-location2.lng(),2);
-//   return sqrt(x2 + y2);
-// }
+/**
+ * function: wakeUp
+ * Do the necessary functions to "wake up" the user
+ */
+function wakeUp()
+{
+  console.log("WAKE UP");
+}
 
 /**
  * function: handleNoGeolocation
