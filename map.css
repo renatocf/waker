@@ -70,7 +70,7 @@ html, body, #map-canvas {
 
 @media (orientation:landscape){
   html, body, #map-canvas {
-    height: calc(100%-24px);
+    height: calc(100% - 24px);
     margin: 10px;
     padding: 0px;
   }
