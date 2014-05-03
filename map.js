@@ -21,6 +21,7 @@ var canceled = false;
 var button_wake;
 var button_stop;
 var vibration;
+var hasAudio;
 
 /**
  * function: initialize
@@ -33,15 +34,12 @@ function initialize()
                   navigator.mozVibrate || 
                   navigator.msVibrate;
 
-  if (navigator.vibrate) 
-  {
-    navigator.vibrate(500);
-    console.log('we can vibrate');
-  } 
-  else 
-  {
-    console.log('no vibration for you :-(');
-  }
+  if (navigator.vibrate) vibration = true;
+  else vibration = false;
+
+  if (typeof(audio) != "undefined") hasAudio = true;
+  else hasAudio = false;
+
   audio = document.getElementById("audio");
   button_wake = document.getElementById("button_wake");
   button_stop = document.getElementById("button_stop");
@@ -85,7 +83,6 @@ function initialize()
     //for (var i = 0, place; place = places[i]; i++) {
       var place = places[0];
       target = place.geometry.location;
-      console.log("UMAUMAUMAE");
 
       var image = {
         url: place.icon,
@@ -202,11 +199,16 @@ function wakeUp()
   button_stop.style.display="block";
   button_canc.style.display="none";
   button_wake.style.display="none";
-  audio.addEventListener('ended', function() {
-    this.currentTime = 0;
-    this.play();
-  }, false);
-  audio.play();
+  if(hasAudio)
+  {
+    audio.addEventListener('ended', function() {
+      this.currentTime = 0;
+      this.play();
+    }, false);
+    audio.play();
+  }
+  if(vibration)
+    navigator.vibrate([500, 1000, 800, 500, 1000]);
 }
 
 /**
@@ -219,7 +221,8 @@ function stop()
   button_stop.style.display="none";
   button_canc.style.display="none";
   button_wake.style.display="block";
-  audio.pause();
+  if(hasAudio) audio.pause();
+  if(vibration) navigator.vibrate(0);
   dist = minimumDist;
 }
 
