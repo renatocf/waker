@@ -1,5 +1,5 @@
 html, body, #map-canvas {
-  height: 80%;
+  height: calc(100% - 72px);
   margin: 10px;
   padding: 0px;
 }
@@ -56,4 +56,14 @@ html, body, #map-canvas {
 .btn{
   margin-left:30%;
   width:40%;
+  margin-bottom:15px;
+  margin-top:5px;
+}
+
+@media all and (max-width:600px){
+ .btn{
+    margin:0;
+    margin-bottom:10px;
+    width:100%;
+  } 
 }
